@@ -18,7 +18,7 @@ namespace PremiumApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "From Calculate premium controller" };
+            return new string[] { "" };
         }   
         [HttpPost]
         public ActionResult Post([FromBody] UserDetail userDetail)

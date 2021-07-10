@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Premium.Constants;
 using Premium.Models;
 using Premium.Models.ViewModels;
@@ -12,13 +11,11 @@ namespace Premium.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IPremiumService premiumService;
         private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IPremiumService premiumService, IMapper mapper)
+        public HomeController(IPremiumService premiumService, IMapper mapper)
         {
-            _logger = logger;
             this.premiumService = premiumService;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -28,17 +25,13 @@ namespace Premium.Controllers
             return View(premiumService.GetOccupationList());
         }
 
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
         [HttpPost]
-        public IActionResult Calculate(PremiumViewModel premiumViewModel)
+        public async Task<IActionResult> Calculate(PremiumViewModel premiumViewModel)
         {          
             if (ModelState.IsValid)
             {
                 var model = _mapper.Map<Premiums>(premiumViewModel);
-                var response = premiumService.GetPremium(model).Result;
+                var response = await premiumService.GetPremium(model);
                 if (response.IsSuccess)
                 {
                     ViewBag.result = response.Premium;
@@ -52,10 +45,5 @@ namespace Premium.Controllers
             return View("Index", premiumService.GetOccupationList());
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
     }
 }
