@@ -1,0 +1,62 @@
+﻿@model Premium.Models.ViewModels.PremiumViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+    <div class="row justify-content-md-center">
+        <div class="col-md-5">
+            @using (Html.BeginForm("Calculate", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Premium Calculator</div>
+                        @if (ViewBag.result != null)
+                        {
+                            <span class="badge badge-success"> Your monthly premium will be $@ViewBag.result</span>
+                        }
+                        @if (ViewBag.error != null)
+                        {
+                            <span class="badge badge-danger">@ViewBag.error</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name)
+                            @Html.Label("", "*", new { id = "star", @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.Name, "", new { @class = "form-control", @placeholder = "Name" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "badge badge-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Age)
+                            @Html.TextBoxFor(m => m.Age, "", new { @class = "form-control", @placeholder = "Age", @readonly = "true" } )
+                            @Html.ValidationMessageFor(m => m.Age, "", new { @class = "badge badge-danger" })
+
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.DateOfBirth)
+                            @Html.Label("", "*", new { id = "star", @class = "text-danger" })
+                          @Html.TextBoxFor(m => m.DateOfBirth, "{0:dd/MM/yyyy}", new { @class = "form-control", @placeholder = "DD/MM/YYYY" })
+                            @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "badge badge-danger" })
+                             
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Occupation)
+                            @Html.Label("", "*", new { id = "star", @class = "text-danger" })
+                            @Html.DropDownListFor(x => Model.OccupationType, new SelectList(Model.Occupation, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
+                            @Html.ValidationMessageFor(x => x.OccupationType, "", new { @class = "badge badge-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.SumInsured)
+                            @Html.Label("", "*", new { id = "star", @class = "text-danger" })
+                            @Html.TextBoxFor(m => m.SumInsured, new { @class = "form-control", @placeholder = "Amount" })
+                            @Html.ValidationMessageFor(m => m.SumInsured, "", new { @class = "badge badge-danger" })
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-danger" value="Calculate" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
