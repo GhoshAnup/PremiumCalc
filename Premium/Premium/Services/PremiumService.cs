@@ -7,10 +7,8 @@ using Premium.Models.ViewModels;
 using Premium.Services.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Premium.Services
@@ -19,7 +17,7 @@ namespace Premium.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration config;
-        public string ProjectApiUrl { get; set; }
+        public string CalculatePremiumApiUrl { get; set; }
         public PremiumService(IConfiguration config,
             IHttpClientFactory httpClientFactory)
         {
@@ -27,16 +25,19 @@ namespace Premium.Services
             _httpClientFactory = httpClientFactory ??
               throw new ArgumentNullException(nameof(httpClientFactory));
         }
-        public PremiumViewModel GetOccupationList()
+        public async Task<PremiumViewModel> GetOccupationList()
         {
-            var premiumViewModel = GetOccupationList(config["OccupationName/Type"]);
+            var premiumViewModel = new PremiumViewModel
+            {
+                Occupation = await GetOccupations()
+            };
             return premiumViewModel;
-        }  
+        }
         public async Task<PremiumResponse> GetPremium(Premiums premium)
         {
             var result = new PremiumResponse();
-            ProjectApiUrl = config["ProjectApiUrl"];
-            var ratingFactor = config[premium.OccupationType];
+            CalculatePremiumApiUrl = config["CalculatePremiumApiUrl"];
+            var ratingFactor = premium.FactorRating; // config[premium.OccupationType];
             if (!string.IsNullOrEmpty(ratingFactor))
             {
                 try
@@ -50,55 +51,39 @@ namespace Premium.Services
                     };
                     var user = JsonConvert.SerializeObject(userDetail);
                     var stringContent = new StringContent(user, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(ProjectApiUrl, stringContent);
+                    var response = await httpClient.PostAsync(CalculatePremiumApiUrl, stringContent);
                     response.EnsureSuccessStatusCode();
                     result = JsonConvert.DeserializeObject<PremiumResponse>(await response.Content.ReadAsStringAsync());
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     result.IsSuccess = false;
-                    result.ResponseMessage = Constant.FaliureMessage ;
+                    result.ResponseMessage = Constant.FaliureMessage;
                 }
             }
             else
             {
                 result.IsSuccess = false;
-                result.ResponseMessage = $"{Constant.WrongRatingFactor} {premium.OccupationType}.";
+                //result.ResponseMessage = $"{Constant.WrongRatingFactor} {premium.OccupationType}.";
             }
             return result;
         }
-        private PremiumViewModel GetOccupationList(string occupationList)
-        {
-            var premiumViewModel = new PremiumViewModel();
-            List<Occupation> occupationItems = new List<Occupation>();
-            if (!string.IsNullOrEmpty(occupationList))
+
+        public async Task<List<OccupationFactor>> GetOccupations()
+        {            
+            var result = new List<OccupationFactor>();
+            try
             {
-                var collection = occupationList.Split(',').ToList();
-                foreach (var item in collection)
-                {
-                    var obj = item.Split('/');
-                    if (obj.Length > 1)
-                    {
-                        var occupation = new Occupation
-                        {
-                            Value = obj[1],
-                            Text = obj[0]
-                        };
-                        occupationItems.Add(occupation);
-                    }
-                }
+                var uri = config["OccupationApiUrl"];
+                var httpClient = _httpClientFactory.CreateClient();
+                var response =await  httpClient.GetAsync(uri);
+                result = JsonConvert.DeserializeObject<List<OccupationFactor>>(await response.Content.ReadAsStringAsync());
             }
-            else
+            catch (Exception e)
             {
-                var occupation = new Occupation
-                {
-                    Value = string.Empty,
-                    Text = string.Empty
-                };
-                occupationItems.Add(occupation);
+                throw e;
             }
-            premiumViewModel.Occupation = occupationItems;
-            return premiumViewModel;
-        }
+            return result;
+        }      
     }
 }

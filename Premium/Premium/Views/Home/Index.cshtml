@@ -9,7 +9,7 @@
                 @Html.AntiForgeryToken()
 
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" id="divMessage">
                         <div class="card-title">Premium Calculator</div>
                         @if (ViewBag.result != null)
                         {
@@ -43,8 +43,10 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.Occupation)
                             @Html.Label("", "*", new { id = "star", @class = "text-danger" })
-                            @Html.DropDownListFor(x => Model.OccupationType, new SelectList(Model.Occupation, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
-                            @Html.ValidationMessageFor(x => x.OccupationType, "", new { @class = "badge badge-danger" })
+                            @Html.DropDownListFor(x => Model.FactorRating, new SelectList(Model.Occupation, "FactorValue", "OccupationName"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
+                            @Html.ValidationMessageFor(x => x.FactorRating, "", new { @class = "badge badge-danger" })
+                            @*@Html.DropDownListFor(x => Model.OccupationType, new SelectList(Model.Occupation, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
+                            @Html.ValidationMessageFor(x => x.OccupationType, "", new { @class = "badge badge-danger" })*@
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.SumInsured)

@@ -10,15 +10,18 @@ namespace PremiumApi.Controllers
     public class CalculatePremiumController : ControllerBase
     {
         private readonly IPremiumCalculatorService premiumCalculatorService;
+        private readonly IOccupationService occupationService;
 
         public CalculatePremiumController(IPremiumCalculatorService premiumCalculatorService)
         {
             this.premiumCalculatorService = premiumCalculatorService;
+           
         }
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult Get()
         {
-            return new string[] { "" };
+            var result = string.Empty;
+            return Ok(result);
         }   
         [HttpPost]
         public ActionResult Post([FromBody] UserDetail userDetail)

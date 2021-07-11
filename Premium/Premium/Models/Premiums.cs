@@ -9,7 +9,7 @@ namespace Premium.Models
     {
         public string Name { get; set; }
         public string Age { get; set; }
-        public string OccupationType { get; set; }
+        public string FactorRating { get; set; }
         public int SumInsured { get; set; }
     }
 }

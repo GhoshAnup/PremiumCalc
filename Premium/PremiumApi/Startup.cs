@@ -32,6 +32,8 @@ namespace PremiumApi
             services.AddControllers();
             services.AddScoped<IPremiumCalculatorRepository, PremiumCalculatorRepository>();
             services.AddScoped<IPremiumCalculatorService, PremiumCalculatorService>();
+            services.AddScoped<IOccupationService, OccupationService>();
+            services.AddScoped<IOccupationRepository, OccupationRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

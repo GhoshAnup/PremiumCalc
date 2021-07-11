@@ -55,7 +55,7 @@ namespace PremiumTest
                 Age="30",
                 DateOfBirth=Convert.ToDateTime("01/03/1988"),
                 SumInsured =30000,
-                OccupationType ="Light Manual"
+                FactorRating ="1.5"
             };
             var premiumResponse = new PremiumResponse
             {
@@ -68,7 +68,7 @@ namespace PremiumTest
                 Name = "TestUser",
                 Age="30",
                 SumInsured = 30000,
-                OccupationType = "Light Manual"
+                FactorRating = "1.5"
             };
             premiumServiceMock.Setup(_ => _.GetPremium(premiums)).Returns(Task.FromResult(premiumResponse));
 

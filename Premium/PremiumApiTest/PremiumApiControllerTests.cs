@@ -13,6 +13,7 @@ namespace PremiumApiTest
         {
             // Arrange  
             var premiumCalculatorServiceMock = new Mock<IPremiumCalculatorService>();
+           
             var userDetail = new UserDetail
             {
                 Age = 20,
