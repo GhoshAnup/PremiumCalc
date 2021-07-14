@@ -84,7 +84,6 @@ $("#btnClear").on("click", function (e) {
     $('#Age').val("");
     $('#SumInsured').val("");
     $('#DateOfBirth').val("");
-    alert($('#Name').val());
     //$('#Occupation').prop('selectedIndex', 0);
 });
 
