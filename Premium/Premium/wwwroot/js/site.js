@@ -78,13 +78,12 @@ $("#Occupation").on("change", function (e) {
     });
 });
 
-$("#btnClear").on("click", function (e) {
-   
+$("#btnClear").on("click", function (e) {   
     $('#Name').val("");
     $('#Age').val("");
     $('#SumInsured').val("");
     $('#DateOfBirth').val("");
-    //$('#Occupation').prop('selectedIndex', 0);
+    $('#Occupation').prop('selectedIndex', 0);
 });
 
 function RemoveMessage(message) {
