@@ -3,6 +3,7 @@ using PremiumApi.Models;
 using PremiumApi.Repository.Interface;
 using PremiumApi.Services;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PremiumApiTest
@@ -35,6 +36,29 @@ namespace PremiumApiTest
             // Assert  
             Assert.NotNull(result);
             Assert.Equal(premiumResponse.IsSuccess, result.IsSuccess);
+        }
+
+        [Fact]
+        public void Should_Return_Occupations_When_Input_Is_Valid()
+        {
+            // Arrange           
+            var ocupationList = new List<OccupationFactor>();           
+            var occupationFactor = new OccupationFactor
+            {
+                FactorValue = "1.5",
+                OccupationName = "Doctor"
+            };
+            ocupationList.Add(occupationFactor);
+            var occupationRepository = new Mock<IOccupationRepository>();
+            occupationRepository.Setup(_ => _.GetOccupations()).Returns(ocupationList);
+
+            // Act
+            var occupationService = new OccupationService(occupationRepository.Object);
+            var result = occupationService.GetOccupations();
+
+            // Assert  
+            Assert.NotNull(result);
+            Assert.Equal(ocupationList.Count, result.Count);
         }
     }
 }

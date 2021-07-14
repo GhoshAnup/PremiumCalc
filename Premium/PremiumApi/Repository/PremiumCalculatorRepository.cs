@@ -30,6 +30,6 @@ namespace PremiumApi.Repository
                 _logger.LogError($"{exception.Message}");
             }
             return response;
-        }
+        }      
     }
 }

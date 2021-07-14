@@ -2,6 +2,7 @@
 using Moq;
 using PremiumApi.Models;
 using PremiumApi.Repository;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PremiumApiTest
@@ -33,6 +34,20 @@ namespace PremiumApiTest
             // Assert  
             Assert.NotNull(result);
             Assert.Equal(premiumResponse.IsSuccess, result.IsSuccess);
+        }
+
+        [Fact]
+        public void Should_Return_OccupationList_When_Input_Is_Valid()
+        {
+            // Arrange    
+            var mockLoggerFactory = new Mock<ILogger<OccupationRepository>>();
+
+            // Act
+            var occupationRepository = new OccupationRepository(mockLoggerFactory.Object);
+            var result = occupationRepository.GetOccupations();
+
+            // Assert  
+            Assert.NotNull(result);
         }
     }
 }
