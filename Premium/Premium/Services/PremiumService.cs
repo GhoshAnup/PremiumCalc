@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Premium.Services
@@ -37,12 +38,12 @@ namespace Premium.Services
         {
             var result = new PremiumResponse();
             CalculatePremiumApiUrl = config["CalculatePremiumApiUrl"];
-            var ratingFactor = premium.FactorRating; // config[premium.OccupationType];
+            var ratingFactor = premium.FactorRating;
             if (!string.IsNullOrEmpty(ratingFactor))
             {
                 try
                 {
-                    var httpClient = _httpClientFactory.CreateClient();
+                    var httpClient = _httpClientFactory.CreateClient("PremiumService");
                     var userDetail = new UserDetail
                     {
                         Age = Convert.ToInt32(premium.Age),
@@ -51,9 +52,13 @@ namespace Premium.Services
                     };
                     var user = JsonConvert.SerializeObject(userDetail);
                     var stringContent = new StringContent(user, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync(CalculatePremiumApiUrl, stringContent);
-                    response.EnsureSuccessStatusCode();
-                    result = JsonConvert.DeserializeObject<PremiumResponse>(await response.Content.ReadAsStringAsync());
+                    var response = await httpClient.PostAsync($"api/CalculatePremium", stringContent);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsByteArrayAsync();
+                        var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+                        result = System.Text.Json.JsonSerializer.Deserialize<PremiumResponse>(content, options);
+                    }
                 }
                 catch (Exception)
                 {
@@ -64,7 +69,6 @@ namespace Premium.Services
             else
             {
                 result.IsSuccess = false;
-                //result.ResponseMessage = $"{Constant.WrongRatingFactor} {premium.OccupationType}.";
             }
             return result;
         }
@@ -75,9 +79,14 @@ namespace Premium.Services
             try
             {
                 var uri = config["OccupationApiUrl"];
-                var httpClient = _httpClientFactory.CreateClient();
-                var response =await  httpClient.GetAsync(uri);
-                result = JsonConvert.DeserializeObject<List<OccupationFactor>>(await response.Content.ReadAsStringAsync());
+                var httpClient = _httpClientFactory.CreateClient("OccupationService");
+                var response = await httpClient.GetAsync($"api/Occupation");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsByteArrayAsync();
+                    var options = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+                    result = System.Text.Json.JsonSerializer.Deserialize<List<OccupationFactor>>(content, options);
+                }
             }
             catch (Exception e)
             {

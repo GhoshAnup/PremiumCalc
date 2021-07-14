@@ -29,7 +29,14 @@ namespace Premium
         {
             services.AddControllersWithViews();
             services.AddScoped<IPremiumService, PremiumService>();
-            services.AddHttpClient();
+            services.AddHttpClient("OccupationService", config =>
+            {
+                config.BaseAddress = new Uri(Configuration["Services:Occupation"]);
+            });
+            services.AddHttpClient("PremiumService", config =>
+            {
+                config.BaseAddress = new Uri(Configuration["Services:Premium"]);
+            });
             services.AddAutoMapper(typeof(Startup));
         }
 

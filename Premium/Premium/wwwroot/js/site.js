@@ -84,6 +84,9 @@ $("#btnClear").on("click", function (e) {
     $('#SumInsured').val("");
     $('#DateOfBirth').val("");
     $('#Occupation').prop('selectedIndex', 0);
+    if ($("#divMessage span").length > 0) {
+        $('#divMessage').find('span').remove()
+    }
 });
 
 function RemoveMessage(message) {
