@@ -35,6 +35,7 @@ namespace Premium.Controllers
                 var response = await premiumService.GetPremium(model);
                 if (response.IsSuccess)
                 {
+                    ModelState.Clear();
                     ViewBag.result = response.Premium;
                 }
                 else { ViewBag.error = response.ResponseMessage; }                 

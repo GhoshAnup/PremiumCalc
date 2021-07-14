@@ -29,34 +29,34 @@
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.Age)
-                            @Html.TextBoxFor(m => m.Age, "", new { @class = "form-control", @placeholder = "Age", @readonly = "true" } )
+                            @Html.TextBoxFor(m => m.Age, "", new { @class = "form-control", @placeholder = "Age", @readonly = "true" })
                             @Html.ValidationMessageFor(m => m.Age, "", new { @class = "badge badge-danger" })
 
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.DateOfBirth)
                             @Html.Label("", "*", new { id = "star", @class = "text-danger" })
-                          @Html.TextBoxFor(m => m.DateOfBirth, "{0:dd/MM/yyyy}", new { @class = "form-control", @placeholder = "DD/MM/YYYY" })
+                            @Html.TextBoxFor(m => m.DateOfBirth, "{0:dd/MM/yyyy}", new { @class = "form-control", @placeholder = "DD/MM/YYYY" })
                             @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "badge badge-danger" })
-                             
+
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.Occupation)
                             @Html.Label("", "*", new { id = "star", @class = "text-danger" })
                             @Html.DropDownListFor(x => Model.FactorRating, new SelectList(Model.Occupation, "FactorValue", "OccupationName"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
                             @Html.ValidationMessageFor(x => x.FactorRating, "", new { @class = "badge badge-danger" })
-                            @*@Html.DropDownListFor(x => Model.OccupationType, new SelectList(Model.Occupation, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "form-control", id = "Occupation" })
-                            @Html.ValidationMessageFor(x => x.OccupationType, "", new { @class = "badge badge-danger" })*@
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(m => m.SumInsured)
                             @Html.Label("", "*", new { id = "star", @class = "text-danger" })
-                            @Html.TextBoxFor(m => m.SumInsured, new { @class = "form-control", @placeholder = "Amount" })
+                            @Html.TextBoxFor(m => m.SumInsured, new { @class = "form-control", @placeholder = "$" })
                             @Html.ValidationMessageFor(m => m.SumInsured, "", new { @class = "badge badge-danger" })
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mr-2">
                             <input type="submit" name="submit" class="btn btn-danger" value="Calculate" />
-                        </div>
+                            <span> </span>
+                            <input type="reset" id="btnClear" class="btn btn-warning" value="Reset" />
+                        </div>                       
                     </div>
                 </div>
             }

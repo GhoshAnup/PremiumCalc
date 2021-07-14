@@ -47,7 +47,7 @@ $("#Occupation").on("change", function (e) {
     }
 
     if (deathSumInsured < 1000 || deathSumInsured > 10000000) {
-        RemoveMessage("Death Sum Insured value must be between 1000 and 100,00,000");     
+        RemoveMessage("Death Sum Insured value must be between $1000 and $100,00,000");     
         return false;
     }
     $.ajax({
@@ -76,6 +76,16 @@ $("#Occupation").on("change", function (e) {
             }
         }
     });
+});
+
+$("#btnClear").on("click", function (e) {
+   
+    $('#Name').val("");
+    $('#Age').val("");
+    $('#SumInsured').val("");
+    $('#DateOfBirth').val("");
+    alert($('#Name').val());
+    //$('#Occupation').prop('selectedIndex', 0);
 });
 
 function RemoveMessage(message) {

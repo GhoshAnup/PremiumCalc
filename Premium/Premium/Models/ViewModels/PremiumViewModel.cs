@@ -26,7 +26,7 @@ namespace Premium.Models.ViewModels
 
         [Required]
         [DisplayName("Death – Sum Insured")]
-        [Range(1000, 10000000, ErrorMessage = "Death – Sum Insured value must be between 1000 and 100,00,000")]
+        [Range(1000, 10000000, ErrorMessage = "Death – Sum Insured value must be between $1000 and $100,00,000")]
         public int? SumInsured { get; set; }
     }
 }
